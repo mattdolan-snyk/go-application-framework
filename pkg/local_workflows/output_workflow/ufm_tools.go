@@ -110,6 +110,10 @@ func HandleContentTypeUnifiedModel(input []workflow.Data, invocation workflow.In
 			mimetype:  HTML_MIME_TYPE,
 			templates: presenters.ApplicationHTMLTemplatesUfm,
 		},
+		{
+			mimetype:  TOON_MIME_TYPE,
+			templates: nil,
+		},
 	}
 	writerMap := applyTemplatesToWriters(supportedMimeTypes, writers)
 
@@ -128,6 +132,14 @@ func HandleContentTypeUnifiedModel(input []workflow.Data, invocation workflow.In
 
 		go func(name string, writer *WriterEntry, results []testapi.TestResult, invocation workflow.InvocationContext) {
 			defer availableThreads.Release(1)
+			if writer.mimeType == TOON_MIME_TYPE {
+				if renderErr := renderUFMToTOON(invocation.Context(), writer, results, false); renderErr != nil {
+					errMu.Lock()
+					errs = append(errs, renderErr)
+					errMu.Unlock()
+				}
+				return
+			}
 			if renderErr := useRendererWithUnifiedModel(name, writer, results, invocation); renderErr != nil {
 				errMu.Lock()
 				errs = append(errs, renderErr)

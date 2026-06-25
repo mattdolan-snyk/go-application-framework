@@ -59,6 +59,71 @@ func Test_GetWritersFromConfiguration_HTMLFileWriter(t *testing.T) {
 	})
 }
 
+func Test_resolveOutputFormat(t *testing.T) {
+	testCases := []struct {
+		name         string
+		boolKeys     []string
+		defaultFmt   string
+		expectedMime string
+	}{
+		{
+			name:         "no flags → text default",
+			expectedMime: DEFAULT_MIME_TYPE,
+		},
+		{
+			name:         "--toon → TOON",
+			boolKeys:     []string{OUTPUT_CONFIG_KEY_TOON},
+			expectedMime: TOON_MIME_TYPE,
+		},
+		{
+			name:         "--json → JSON",
+			boolKeys:     []string{OUTPUT_CONFIG_KEY_JSON},
+			expectedMime: JSON_MIME_TYPE,
+		},
+		{
+			name:         "--sarif → SARIF",
+			boolKeys:     []string{OUTPUT_CONFIG_KEY_SARIF},
+			expectedMime: SARIF_MIME_TYPE,
+		},
+		{
+			name:         "default-format key → TOON (no explicit flag)",
+			defaultFmt:   TOON_MIME_TYPE,
+			expectedMime: TOON_MIME_TYPE,
+		},
+		{
+			name:         "--json explicit beats default-format TOON",
+			boolKeys:     []string{OUTPUT_CONFIG_KEY_JSON},
+			defaultFmt:   TOON_MIME_TYPE,
+			expectedMime: JSON_MIME_TYPE,
+		},
+		{
+			name:         "--toon explicit beats default-format JSON",
+			boolKeys:     []string{OUTPUT_CONFIG_KEY_TOON},
+			defaultFmt:   JSON_MIME_TYPE,
+			expectedMime: TOON_MIME_TYPE,
+		},
+		{
+			name:         "default-format empty string → text default",
+			defaultFmt:   "",
+			expectedMime: DEFAULT_MIME_TYPE,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			config := configuration.NewWithOpts()
+			for _, key := range tc.boolKeys {
+				config.Set(key, true)
+			}
+			if tc.defaultFmt != "" {
+				config.Set(OUTPUT_CONFIG_KEY_DEFAULT_FORMAT, tc.defaultFmt)
+			}
+
+			assert.Equal(t, tc.expectedMime, resolveOutputFormat(config))
+		})
+	}
+}
+
 func Test_getDefaultWriterMimeType(t *testing.T) {
 	testCases := []struct {
 		name             string

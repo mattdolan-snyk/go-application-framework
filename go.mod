@@ -33,6 +33,7 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/snyk/error-catalog-golang-public v0.0.0-20260205094614-116c03822905
 	github.com/subosito/gotenv v1.6.0
+	github.com/toon-format/toon-go v0.0.0-20251202084852-7ca0e27c4e8c
 	golang.org/x/mod v0.36.0
 	golang.org/x/net v0.55.0
 	golang.org/x/sync v0.21.0
@@ -107,7 +108,6 @@ require (
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
-	github.com/toon-format/toon-go v0.0.0-20251202084852-7ca0e27c4e8c // indirect
 	github.com/vmware-labs/yaml-jsonpath v0.3.2 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f // indirect

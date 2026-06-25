@@ -186,23 +186,32 @@ func applyTemplatesToWriters(supportedMimeTypes []MimeType2Template, writers Wri
 	return writerMap
 }
 
-func getDefaultWriterMimeType(config configuration.Configuration) string {
+// resolveOutputFormat returns the output MIME type with this precedence:
+// explicit flag (--toon/--sarif/--json/--html) > OUTPUT_CONFIG_KEY_DEFAULT_FORMAT > text default.
+func resolveOutputFormat(config configuration.Configuration) string {
+	if config.GetBool(OUTPUT_CONFIG_KEY_TOON) {
+		return TOON_MIME_TYPE
+	}
 	if config.GetBool(OUTPUT_CONFIG_KEY_SARIF) {
 		return SARIF_MIME_TYPE
 	}
-
 	if config.GetBool(OUTPUT_CONFIG_KEY_JSON) {
 		return JSON_MIME_TYPE
 	}
-
 	if config.GetBool(OUTPUT_CONFIG_KEY_HTML) {
 		return HTML_MIME_TYPE
 	}
-
+	if v := config.GetString(OUTPUT_CONFIG_KEY_DEFAULT_FORMAT); v != "" {
+		return v
+	}
 	return DEFAULT_MIME_TYPE
 }
 
+func getDefaultWriterMimeType(config configuration.Configuration) string {
+	return resolveOutputFormat(config)
+}
+
 func DefaultOutputIsStructured(config configuration.Configuration) bool {
-	mimetype := getDefaultWriterMimeType(config)
+	mimetype := resolveOutputFormat(config)
 	return slices.Contains(structuredContent, mimetype)
 }

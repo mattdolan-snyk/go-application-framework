@@ -1,0 +1,41 @@
+{
+  "findings": [
+    {
+      "attributes": {
+        "component": { "name": ".", "scan_type": "sast" },
+        "referenceId": { "identifier": "javascript/DisablePoweredBy", "index": 0 },
+        "rating": { "severity": { "value": "medium" } },
+        "message": { "text": "Disable X-Powered-By header for your Express app (consider using Helmet middleware)." },
+        "locations": [
+          { "source_locations": { "filepath": "app.js", "original_start_line": 27, "original_end_line": 27 } }
+        ]
+      }
+    },
+    {
+      "attributes": {
+        "component": { "name": ".", "scan_type": "sast" },
+        "referenceId": { "identifier": "javascript/HardcodedNonCryptoSecret", "index": 1 },
+        "rating": { "severity": { "value": "high" } },
+        "message": { "text": "Avoid hardcoding values that are meant to be secret." },
+        "locations": [
+          { "source_locations": { "filepath": "app.js", "original_start_line": 73 } }
+        ]
+      }
+    },
+    {
+      "attributes": {
+        "component": { "name": ".", "scan_type": "sast" },
+        "referenceId": { "identifier": "javascript/NoSqli", "index": 2 },
+        "rating": { "severity": { "value": "high" } },
+        "message": { "text": "Unsanitized input from an HTTP parameter flows into a SQL query." },
+        "locations": [
+          { "source_locations": { "filepath": "routes/index.js", "original_start_line": 39 } }
+        ]
+      }
+    }
+  ],
+  "outcome": {},
+  "rules": [],
+  "summary": {},
+  "links": {}
+}

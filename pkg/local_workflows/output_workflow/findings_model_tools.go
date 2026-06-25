@@ -112,6 +112,10 @@ func HandleContentTypeFindingsModel(input []workflow.Data, invocation workflow.I
 			mimetype:  DEFAULT_MIME_TYPE,
 			templates: DefaultTemplateFiles,
 		},
+		{
+			mimetype:  TOON_MIME_TYPE,
+			templates: nil,
+		},
 	}
 	writerMap := applyTemplatesToWriters(supportedMimeTypes, writers)
 
@@ -127,6 +131,12 @@ func HandleContentTypeFindingsModel(input []workflow.Data, invocation workflow.I
 
 		go func(name string, writer *WriterEntry) {
 			defer availableThreads.Release(1)
+			if writer.mimeType == TOON_MIME_TYPE {
+				if renderErr := renderLFMToTOON(writer, findings, false); renderErr != nil {
+					debugLogger.Warn().Err(renderErr).Msgf("LFM - [%s] Failed to render TOON", name)
+				}
+				return
+			}
 			useRendererWith(name, writer, findings, invocation)
 		}(k, v)
 	}

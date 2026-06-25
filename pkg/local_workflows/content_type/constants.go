@@ -7,4 +7,5 @@ const (
 	SARIF_JSON          = "application/sarif+json"
 	HTML                = "text/html"
 	UFM_RESULT          = "application/ufm.result"
+	TOON                = "application/toon"
 )
